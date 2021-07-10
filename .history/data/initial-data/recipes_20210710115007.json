@@ -1,0 +1,23 @@
+[
+  {
+    "_id": {
+      "$oid": "5f02803a258ff350affd3602"
+    },
+    "recipeName": "Salad",
+    "recipeDescription": "healthy salad",
+    "imageUrl": "images/food1.jpg",
+    "cooktime": 0,
+    "preptime": 15,
+    "servings": 2,
+    "calories": 150,
+    "ingredients": "ingredients",
+    "instructions": "instructions",
+    "createdAt": {
+      "$date": "2020-07-06T01:36:58.187Z"
+    },
+    "updatedAt": {
+      "$date": "2020-07-06T01:36:58.187Z"
+    },
+    "__v": 0
+  }
+]
