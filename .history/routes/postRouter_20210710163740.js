@@ -20,8 +20,7 @@ postRouter
   .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     console.log("post body", req.body);
     req.body.postCreator = req.user._id;
-
-    Post.create(req.body)
+    req.body.postDate = Post.create(req.body)
       .then((post) => {
         console.log("Post created: ", post);
         res.statusCode = 200;
