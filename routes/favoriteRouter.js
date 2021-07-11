@@ -11,20 +11,30 @@ favoriteRouter
   .route("/")
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
-    Favorite.find({ user: req.user._id })
-      .populate("user")
-      .populate("recipes")
-      .then((userFavoriteDoc) => {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        res.json(userFavoriteDoc);
+    Favorite.findOne({ user: req.user._id })
+      .then((userFavDoc) => {
+        console.log("favorite/userfavdoc", userFavDoc);
+        if (!userFavDoc) {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.json({ exists: false });
+        } else {
+          Favorite.findById(userFavDoc._id)
+            .populate("recipes")
+            .then((userFavDoc) => {
+              console.log("favorite", userFavDoc);
+              res.statusCode = 200;
+              res.setHeader("Content-Type", "application/json");
+              res.json(userFavDoc.recipes);
+            })
+            .catch((err) => next(err));
+        }
       })
       .catch((err) => next(err));
   })
   .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Favorite.findOne({ user: req.user._id })
       .then((userFavoriteDoc) => {
-        console.log(userFavoriteDoc);
         if (userFavoriteDoc) {
           req.body.forEach((recipeToAdd) => {
             if (!userFavoriteDoc.recipes.includes(recipeToAdd)) {
@@ -85,28 +95,42 @@ favoriteRouter
   .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Favorite.findOne({ user: req.user._id })
       .then((userFavoriteDoc) => {
-        const recipeToAdd = req.params.recipeId;
         if (userFavoriteDoc) {
-          if (userFavoriteDoc.recipes.includes(recipeToAdd)) {
-            res.statusCode = 200;
-            res.setHeader("Content-Type", "text/plain");
-            res.end("That recipe is already in the list of favorites!");
+          console.log("userFavDoc", userFavoriteDoc);
+          if (!userFavoriteDoc.recipes.includes(req.params.recipeId)) {
+            console.log("does not include");
+            userFavoriteDoc.recipes.push({ _id: req.params.recipeId });
+            userFavoriteDoc
+              .save()
+              .then((userFavoriteDoc) => {
+                Favorite.findById(userFavoriteDoc._id)
+                  .populate("recipes")
+                  .then((userFavoriteDoc) => {
+                    console.log("after save", userFavoriteDoc);
+                    res.statusCode = 200;
+                    res.setHeader("Content-Type", "application/json");
+                    res.json(userFavoriteDoc.recipes);
+                  })
+                  .catch((err) => next(err));
+              })
+              .catch((err) => next(err));
           } else {
-            userFavoriteDoc.recipes.push(recipeToAdd);
             res.statusCode = 200;
             res.setHeader("Content-Type", "application/json");
-            res.json(userFavoriteDoc);
+            res.json({ exists: true, recipes: userFavoriteDoc.recipes });
           }
         } else {
-          Favorite.create({ user: req.user._id })
-            .then((userFavoriteDoc) => {
-              userFavoriteDoc.recipes.push(recipeToAdd);
-              userFavoriteDoc
-                .save()
-                .then((userFavoriteDoc) => {
+          Favorite.create({
+            user: req.user._id,
+            campsites: [req.params.campsiteId],
+          })
+            .then((favorite) => {
+              Favorite.findById(favorite._id)
+                .populate("campsites")
+                .then((favorite) => {
                   res.statusCode = 200;
                   res.setHeader("Content-Type", "application/json");
-                  res.json(userFavoriteDoc);
+                  res.json({ exists: true, campsites: favorite.campsites });
                 })
                 .catch((err) => next(err));
             })
@@ -130,6 +154,7 @@ favoriteRouter
           userFavoriteDoc
             .save()
             .then((userFavoriteDoc) => {
+              console.log(userFavoriteDoc);
               res.statusCode = 200;
               res.setHeader("Content-Type", "application/json");
               res.json(userFavoriteDoc);

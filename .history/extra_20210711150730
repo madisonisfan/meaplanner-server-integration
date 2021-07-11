@@ -1,0 +1,47 @@
+.post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+    Favorite.findOne({ user: req.user._id })
+      .then((userFavoriteDoc) => {
+        const recipeToAdd = req.params.recipeId;
+        if (userFavoriteDoc) {
+          if (userFavoriteDoc.recipes.includes(recipeToAdd)) {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "text/plain");
+            res.end("That recipe is already in the list of favorites!");
+          } else {
+            userFavoriteDoc.recipes.push({ _id: req.params.recipeId });
+            userFavoriteDoc
+              .save()
+              .then((userFavoriteDoc) => {
+                Favorite.findById(userFavoriteDoc._id)
+                  .populate("recipes")
+                  .then((userFavoriteDoc) => {
+                    console.log("after save", userFavoriteDoc);
+                    res.statusCode = 200;
+                    res.setHeader("Content-Type", "application/json");
+                    res.json(userFavoriteDoc.recipes);
+                  })
+                  .catch((err) => next(err));
+                /*res.statusCode = 200;
+                res.setHeader("Content-Type", "application/json");
+                res.json(userFavoriteDoc);*/
+              })
+              .catch((err) => next(err));
+          }
+        } else {
+          Favorite.create({ user: req.user._id })
+            .then((userFavoriteDoc) => {
+              userFavoriteDoc.recipes.push(recipeToAdd);
+              userFavoriteDoc
+                .save()
+                .then((userFavoriteDoc) => {
+                  res.statusCode = 200;
+                  res.setHeader("Content-Type", "application/json");
+                  res.json(userFavoriteDoc);
+                })
+                .catch((err) => next(err));
+            })
+            .catch((err) => next(err));
+        }
+      })
+      .catch((err) => next(err));
+  })
