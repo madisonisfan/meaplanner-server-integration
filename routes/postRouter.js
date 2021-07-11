@@ -68,25 +68,55 @@ postRouter
     res.end(`POST operation not support on /posts/${req.params.postId}`);
   })
   .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+    console.log("postID", req.params.postId);
+    console.log("req body", req.body);
     Post.findById(req.params.postId)
       .then((post) => {
         if (post) {
+          console.log("postContent", req.body.postContent);
+          //console.log("postContent", req.body.postContent);
           if (post.postCreator._id.equals(req.user._id)) {
-            if (req.body.postContent) {
+            console.log("they equal");
+            Post.findByIdAndUpdate(
+              req.params.postId,
+              {
+                $set: req.body,
+              },
+              { new: true }
+            )
+              .then((post) => {
+                Post.findById(post._id)
+                  .populate("postCreator")
+                  .then((post) => {
+                    res.statusCode = 200;
+                    res.setHeader("Content-Type", "application/json");
+                    res.json(post);
+                  })
+                  .catch((err) => next(err));
+              })
+              .catch((err) => next(err));
+            /*if (req.body.postContent) {
+              console.log("postContent", req.body.postContent);
               post.postContent = req.body.postContent;
-            }
+            }*/
+            /*
             if (req.body.postType) {
               post.postType = req.body.postType;
-            }
-
+            }*/
+            /*
             post
               .save()
               .then((post) => {
+                console.log("saving post");
                 res.statusCode = 200;
-                res.setHeader("Conten-Type", "application/json");
+                res.setHeader("Content-Type", "application/json");
                 res.json(post);
               })
-              .catch((err) => next(err));
+              .catch((err) => {
+                //problem is in the catch block
+                console.log("catch block");
+                next(err);
+              });*/
           } else {
             const err = new Error("You are not the post creator");
             err.status = 404;
