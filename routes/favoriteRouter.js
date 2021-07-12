@@ -147,17 +147,22 @@ favoriteRouter
     Favorite.findOne({ user: req.user._id })
       .then((userFavoriteDoc) => {
         if (userFavoriteDoc) {
-          const newFavorites = userFavoriteDoc.recipes.filter(
-            (recipe) => recipe._id.toString() !== req.params.recipeId
-          );
-          userFavoriteDoc.recipes = newFavorites;
+          userFavoriteDoc.recipes = userFavoriteDoc.recipes.filter((recipe) => {
+            return recipe._id.toString() !== req.params.recipeId;
+          });
+
           userFavoriteDoc
             .save()
             .then((userFavoriteDoc) => {
-              console.log(userFavoriteDoc);
-              res.statusCode = 200;
-              res.setHeader("Content-Type", "application/json");
-              res.json(userFavoriteDoc);
+              console.log("newUserFavoriteDoc", userFavoriteDoc);
+              Favorite.findById(userFavoriteDoc._id)
+                .populate("recipes")
+                .then((userFavoriteDoc) => {
+                  res.statusCode = 200;
+                  res.setHeader("Content-Type", "application/json");
+                  res.json(userFavoriteDoc.recipes);
+                })
+                .catch((err) => next(err));
             })
             .catch((err) => next(err));
         } else {
