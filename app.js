@@ -12,6 +12,7 @@ const recipeRouter = require("./routes/recipeRouter");
 const postRouter = require("./routes/postRouter");
 const uploadRouter = require("./routes/uploadRouter");
 const favoriteRouter = require("./routes/favoriteRouter");
+const likeRouter = require("./routes/likeRouter");
 
 const mongoose = require("mongoose");
 
@@ -61,6 +62,7 @@ app.use("/recipes", recipeRouter);
 app.use("/posts", postRouter);
 app.use("/imageUpload", uploadRouter);
 app.use("/favorites", favoriteRouter);
+app.use("/likes", likeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
