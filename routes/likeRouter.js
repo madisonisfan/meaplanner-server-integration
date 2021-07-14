@@ -31,7 +31,7 @@ likeRouter
   .delete(
     cors.corsWithOptions,
     authenticate.verifyUser,
-    authenticate.verifyAdmin,
+    //authenticate.verifyAdmin,
     (req, res, next) => {
       Like.remove({})
         .then((resp) => {
@@ -57,11 +57,17 @@ likeRouter
       liker: req.user._id,
       post: req.params.postId,
     })
-
       .then((like) => {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        res.json(like);
+        Like.findById(like._id)
+          .populate("post")
+          .populate("liker")
+          .then((like) => {
+            console.log("like created", like);
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.json(like);
+          })
+          .catch((err) => next(err));
       })
       .catch((err) => next(err));
   })
@@ -70,14 +76,17 @@ likeRouter
     res.end("PUT operation not supported on /likes/");
   })
   .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+    console.log("like to delete", req.params.postId);
     Like.findOne({ liker: req.user._id, post: req.params.postId })
       .then((like) => {
         if (like) {
+          console.log("like to delete", like);
           Like.findOneAndDelete({
             liker: req.user._id,
             post: req.params.postId,
           })
             .then((like) => {
+              console.log("like to delete", like._id);
               res.statusCode = 200;
               res.setHeader("Content-Type", "application/json");
               res.json(like);

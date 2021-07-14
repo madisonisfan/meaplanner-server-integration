@@ -38,7 +38,7 @@ postRouter
   .delete(
     cors.corsWithOptions,
     authenticate.verifyUser,
-    authenticate.verifyAdmin,
+    //authenticate.verifyAdmin,
     (req, res, next) => {
       Post.deleteMany()
         .then((response) => {
