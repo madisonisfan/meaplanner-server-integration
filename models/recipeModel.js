@@ -21,15 +21,15 @@ const recipeSchema = new Schema(
       required: true,
     },
     preptime: {
-      type: Number,
+      type: String,
       required: true,
     },
     calories: {
-      type: Number,
+      type: String,
       required: true,
     },
     servings: {
-      type: Number,
+      type: String,
       required: true,
     },
     ingredients: {

@@ -17,7 +17,9 @@ recipeRouter
       .catch((err) => next(err));
   })
   .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+    //console.log("recipe to create", req.body);
     req.body.recipeCreator = req.user._id;
+    console.log("recipe to create", req.body);
     Recipe.create(req.body)
       .then((recipe) => {
         console.log("Recipe added: ", recipe);
@@ -25,7 +27,10 @@ recipeRouter
         res.setHeader("Content-Type", "application/json");
         res.json(recipe);
       })
-      .catch((err) => next(err));
+      .catch((err) => {
+        console.log("could not create");
+        next(err);
+      });
   })
   .put(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
@@ -76,8 +81,8 @@ recipeRouter
             if (req.body.recipeDescription) {
               recipe.recipeDescription = req.body.recipeDescription;
             }
-            if (req.body.imgUrl) {
-              recipe.imgUrl = req.body.imgUrl;
+            if (req.body.imageUrl) {
+              recipe.imageUrl = req.body.imageUrl;
             }
             if (req.body.cooktime) {
               recipe.cooktime = req.body.cooktime;
