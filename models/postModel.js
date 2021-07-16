@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+/*
 const commentSchema = new Schema(
   {
     commentContent: {
@@ -15,7 +16,7 @@ const commentSchema = new Schema(
   {
     timestamps: true,
   }
-);
+);*/
 
 const postSchema = new Schema(
   {
@@ -41,7 +42,7 @@ const postSchema = new Schema(
         ref: "User",
       },
     ],*/
-    comments: [commentSchema],
+    //comments: [commentSchema],
   },
   {
     timestamps: true,
