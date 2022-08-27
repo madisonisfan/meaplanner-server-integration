@@ -4,6 +4,10 @@ In 2021 I participated in Nucamp's Full-Stack bootcamp. In the second course, we
 
 This project was created as the backend of my MealPlanner React application. [Go to React repository.](https://github.com/madisonisfan/meaplanner-react-integration) Currently, the data provided by the server is a list of recipes. 
 
+# Table Of Contents
+- [Data Stored ](#data-stored)
+- [Technologies](#technologies)
+- [Project Confusion](#project-confusion)
 
 ## Data Stored
 - users: Because users can log in with Facebook, their first name, last name, and Facebook id are stored. 
