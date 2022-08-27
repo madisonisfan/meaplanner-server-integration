@@ -38,4 +38,4 @@ Why are there so many repositories:
 ## Links to Similar Repositories
 - [View Meal Planner React web app not integrated with this server](https://github.com/madisonisfan/mealplanner-react)
 - [View Meal Planner React web app edited to be integrated with Meal Planner server](https://github.com/madisonisfan/meaplanner-react-integration)
-- [View Meal Planner server edited to be integrated with Meal Planner web app](https://github.com/madisonisfan/meaplanner-server-integration)
+- [View Meal Planner server not integrated with a React app](https://github.com/madisonisfan/meaplanner-node-express-mongodb)
