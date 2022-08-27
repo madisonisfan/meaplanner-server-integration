@@ -14,8 +14,8 @@ This project was created as the backend of my MealPlanner React application. [Go
 - recipes: all recipes added by myself (admin) and other users are stored, including data such as recipe name, ingredients, instructions, cook time, prep time, calories, servings, creation date, creator, and an image URL 
 - posts: All posts added by myself (admin) and other users are stored, including data such as post content, post type (ex: a question), creator, and creation date
 - comments: All comments made on posts are stored, including data such as the comment content, date, creator, and id of the post the comment was made on
-- post likes: Every post can be liked by each user once. To track, each like is individually stored with the Id of
-<! --  All users can edit (put), add(post), and delete, their own recipes. The admin can apply edit, add, delete any recipes they want. -->
+- post likes: Every post can be liked by each user once. To track, each like is individually stored with the Id of user who liked, and the ID of the post liked
+<!--  All users can edit (put), add(post), and delete, their own recipes. The admin can apply edit, add, delete any recipes they want. -->
 
 ## Technologies 
 There are some features that are not fully completed. 
