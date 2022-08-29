@@ -7,6 +7,7 @@ This project was created as the backend of my MealPlanner React application. [Go
 # Table Of Contents
 - [Data Stored ](#data-stored)
 - [Technologies](#technologies)
+- [Installation and Usage](#installation-and-usage)
 - [Project Confusion](#project-confusion)
 
 ## Data Stored
@@ -32,6 +33,13 @@ It has not been updated since 2021, so there might be a few bugs.
 - Multer 
 - JSON Web Token 
 
+
+## Installation and Usage
+In the project directory, you can run:
+
+Install dependencies: `yarn install` or `npm install`
+
+To run: `yarn start` or `npm start`
 
 ## Project Confusion
 Why are there so many repositories: 
